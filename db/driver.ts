@@ -15,6 +15,14 @@ CREATE TABLE IF NOT EXISTS equipment (
   name TEXT NOT NULL
 );
 
+INSERT OR IGNORE INTO equipment (id, name) VALUES
+  ('eq_none', 'None'),
+  ('eq_rings', 'Rings'),
+  ('eq_parallettes', 'Parallettes'),
+  ('eq_pullup_bar', 'Pull-up Bar'),
+  ('eq_barbell', 'Barbell'),
+  ('eq_dumbbell', 'Dumbbell');
+
 CREATE TABLE IF NOT EXISTS exercise (
   id               TEXT PRIMARY KEY,
   name             TEXT NOT NULL,
@@ -27,6 +35,14 @@ CREATE TABLE IF NOT EXISTS exercise (
   updated_at       TEXT NOT NULL,
   FOREIGN KEY (base_exercise_id) REFERENCES exercise(id)
 );
+
+INSERT OR IGNORE INTO exercise (id, name, training_type, created_at, updated_at) VALUES
+  ('ex_pushup',    'Push-up',          'resistance', datetime('now'), datetime('now')),
+  ('ex_pullup',    'Pull-up',          'resistance', datetime('now'), datetime('now')),
+  ('ex_squat',     'Bodyweight Squat', 'resistance', datetime('now'), datetime('now')),
+  ('ex_run',       'Run',              'cardio',     datetime('now'), datetime('now')),
+  ('ex_plank',     'Plank',            'skill',      datetime('now'), datetime('now')),
+  ('ex_couch',     'Couch Stretch',    'mobility',   datetime('now'), datetime('now'));
 
 CREATE TABLE IF NOT EXISTS exercise_equipment (
   exercise_id  TEXT NOT NULL,
@@ -47,6 +63,15 @@ CREATE TABLE IF NOT EXISTS exercise_variant (
   FOREIGN KEY (equipment_id) REFERENCES equipment(id),
   UNIQUE (exercise_id, equipment_id)
 );
+
+INSERT OR IGNORE INTO exercise_variant (id, exercise_id, equipment_id, display_name) VALUES
+  ('ev_pushup_floor',   'ex_pushup', 'eq_none',       'Push-up (Floor)'),
+  ('ev_pushup_parl',    'ex_pushup', 'eq_parallettes','Push-up (Parallettes)'),
+  ('ev_pullup_bar',     'ex_pullup', 'eq_pullup_bar', 'Pull-up (Bar)'),
+  ('ev_squat_bw',       'ex_squat',  'eq_none',       'Bodyweight Squat'),
+  ('ev_run_none',       'ex_run',    'eq_none',       'Run'),
+  ('ev_plank_floor',    'ex_plank',  'eq_none',       'Plank'),
+  ('ev_couch_stretch',  'ex_couch',  'eq_none',       'Couch Stretch');
 
 CREATE TABLE IF NOT EXISTS progression_map (
   id               TEXT PRIMARY KEY,
